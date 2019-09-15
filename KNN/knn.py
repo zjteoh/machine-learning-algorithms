@@ -27,9 +27,9 @@ class k_nearest_neighbors:
 	max_k = The largest number of neighbors to be considered. Default set at 10
 	split = Split ratio between training and validation/testing
 	'''
-	def __init__(self, max_k = 10, split = 0.8):
-		if split > 0.8 or split < 0.6:
-			raise ValueError("Split should be between 0.6 to 0.8")
+	def __init__(self, max_k = 10, split = 0.85):
+		if split > 0.85 or split < 0.6:
+			raise ValueError("Split should be between 0.6 to 0.85")
 
 		self.max_k = max_k
 		self.split = split
