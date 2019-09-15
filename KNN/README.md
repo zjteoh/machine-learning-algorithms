@@ -4,13 +4,22 @@
 2. It has two hyperparameters namely distance functions and k value
 3. Normalization is provided if needed
 
-## EXAMPLE:
+## To read from specified filename:
 ```
-knn = k_nearest_neighbors(max_k = 20, split=0.7)
-knn.train(features, labels)
-predicted_y = knn.predict(feature_to_predict)
+knn = k_nearest_neighbors()
+knn.train('iris_set.csv')
+predicted_y_list = knn.predict(features_to_predict) # features_to_predict should be in List[List[int]] format
 ```
+
+## To read data as parameters:
+```
+knn = k_nearest_neighbors()
+knn.train(x=features, y=labels) # features => List[List[int]], # labels = List[any]
+predicted_y_list = knn.predict(features_to_predict) # features_to_predict should be in List[List[int]] format
+```
+
 > max_k = Maximum k neighbors to be considered (default k = 10)
 
-> split = Split ratio between validation and testing. (default split = 0.8) 
-        **Split must be between 0.5 ~ 0.8**
+> split = Split ratio between training and validation/testing and only considered if filename not given during train()
+	 = The testing ratio is always set at 0.05. For example, if split = 0.7, then training ratio is 0.7, validation is
+	   0.25 and testing is 0.05
