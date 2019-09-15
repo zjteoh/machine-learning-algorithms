@@ -88,16 +88,6 @@ class k_nearest_neighbors:
 		raise NotImplementedError
 
 
-x = [[1,0,1],
-     [0,0,0],
-     [1,0,1],
-     [0,0,0]]
-
-y = [1,0,1,0]
-
-knn = k_nearest_neighbors()
-knn.train(x,y)
-print(knn.predict([1,0,1]))
 
 
 
