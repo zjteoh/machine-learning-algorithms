@@ -9,7 +9,7 @@
 7. Features should be in List[List[int]] form, where every row represents a data point.
 8. Labels should be in List[any] form, where each element represents the classification.
 
-# To initialize k-NN with maximum k = 20 and split-ratio of 0.8
+## To initialize k-NN with maximum k = 20 and split-ratio of 0.8
 ```
 knn = k_nearest_neighbors(max_k=20, split=0.8)
 ```
