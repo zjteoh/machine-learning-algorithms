@@ -3,23 +3,38 @@
 1. This is an easy to use k-nearest-neighbors implementation created from scratch.
 2. It has two hyperparameters namely distance functions and k value
 3. Normalization is provided if needed
+4. You can choose between three types of distance functions: 'euclidean', 'gaussian_kernel' and 'inner_product'
+5. Split is the ratio between training and validation/testing. Default split = 0.85
+6. max-k is the largest k nearest neighbors to be considered. Default max_k = 10
+7. Features should be in List[List[int]] form, where every row represents a data point.
+8. Labels should be in List[any] form, where each element represents the classification.
+
+# To initialize k-NN with maximum k = 20 and split-ratio of 0.8
+```
+knn = k_nearest_neighbors(max_k=20, split=0.8)
+```
 
 ## To read from specified filename:
 ```
-knn = k_nearest_neighbors()
 knn.train('iris_set.csv')
-predicted_y_list = knn.predict(features_to_predict) # features_to_predict should be in List[List[int]] format
 ```
 
 ## To read data as parameters:
 ```
-knn = k_nearest_neighbors()
-knn.train(x=features, y=labels) # features => List[List[int]], # labels = List[any]
-predicted_y_list = knn.predict(features_to_predict) # features_to_predict should be in List[List[int]] format
+knn.train(x=features, y=labels)
 ```
 
-> max_k = Maximum k neighbors to be considered (default k = 10)
+## To change the default distance function (euclidean):
+```
+knn.train(..., distance_function='gaussian_kernel')
+```
 
-> split = Split ratio between training and validation/testing and only considered if filename not given during train()
-	 = The testing ratio is always set at 0.05. For example, if split = 0.7, then training ratio is 0.7, validation is
-	   0.25 and testing is 0.05
+## To normalize the data (L2-Norm)
+```
+knn.train(...,normal=True)
+```
+
+## To predict new features
+```
+predicted_labels = knn.predict(features_to_predict)
+```

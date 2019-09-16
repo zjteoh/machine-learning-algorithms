@@ -13,6 +13,8 @@ split = Split ratio between training and validation/testing (only considered if 
 	  = The testing ratio is always set at 0.05. For example, if split = 0.7, then training ratio is 0.7, validation is
 	    0.25 and testing is 0.05
 
+distance_function = The type of distance function to be used. Choose between 'euclidean', 'gaussian_kernel' or 'inner_product'
+
 For the data, all features should be aligned by column. This means each row represents a single data point
 
 EXAMPLE:
@@ -27,14 +29,14 @@ class k_nearest_neighbors:
 	max_k = The largest number of neighbors to be considered. Default set at 10
 	split = Split ratio between training and validation/testing
 	'''
-	def __init__(self, max_k = 10, split = 0.85):
+	def __init__(self, max_k = 10, split = 0.85, distance_function='euclidean'):
 		if split > 0.85 or split < 0.6:
 			raise ValueError("Split should be between 0.6 to 0.85")
 
 		self.max_k = max_k
 		self.split = split
 		self.best_k = None
-		self.best_distance_function = None
+		self.distance_function = distance_function
 
 
 
@@ -42,11 +44,14 @@ class k_nearest_neighbors:
 	x = List[List[int]] -- feature(s) of data
 	  = Each row should represent a data point
 	  = Each column represents the same feature for all data points
+
 	y = List(any) -- labels of data
+
+	normal = Set true to normalize the data. Default is false
 
 	Initializes the data and finds the best hyperparameters given the set of data
 	'''
-	def train(self, filename='', x = None, y = None):
+	def train(self, filename='', x = None, y = None, normal=False):
 		if len(filename) > 0:
 			self.filename = filename
 			self.x_train, self.y_train, self.x_val, self.y_val, self.x_test, self.y_test = self.read_and_process_data(filename) 
@@ -64,7 +69,9 @@ class k_nearest_neighbors:
 		else:
 			raise ValueError('Either filename must be set OR x and y must be set')
 
-		self.normalize()
+		if normal:
+			self.normalize()
+
 		self.tuning()
 
 
@@ -83,6 +90,7 @@ class k_nearest_neighbors:
 
 	'''
 	x = feature(s) for a point
+
 	k = the number of nearest neighbors to be considered
 	tuning = True during tuning, False otherwise
 
@@ -103,6 +111,7 @@ class k_nearest_neighbors:
 
 	'''
 	x = feature(s) for a point
+
 	k = the number of nearest neighbors to be considered
 	tuning = True during tuning, False otherwise
 
@@ -127,6 +136,7 @@ class k_nearest_neighbors:
 
 	'''
 	x1 = feature(s) for point x1
+
 	x2 = feature(s) for point x2
 
 	Find the distance between two points. This function has inner functions of various distance functions
@@ -134,18 +144,35 @@ class k_nearest_neighbors:
 	best_distance_function set by tuning() earlier during training 
 	'''
 	def get_distance(self, x1, x2):
-		def euclidean_distance(x1, x2):
+		def euclidean_dist(x1, x2):
 			difference = np.subtract(x1,x2)
 			return np.sqrt(np.dot(difference, difference))
 
-		return euclidean_distance(x1, x2)
+		def inner_prod_distance(x1, x2):
+			return np.dot(x1, x2)
+
+		def gaussian_kernel_dist(x1, x2):
+			temp = np.subtract(x1,x2)
+			return -np.exp(-0.5 * np.dot(temp, temp))
+
+		if self.distance_function = 'euclidean':
+			return euclidean_distance(x1, x2)
+
+		elif self.distance_function = 'inner_product':
+			return inner_prod_distance(x1, x2)
+
+		elif self.distance_function = 'gaussian_kernel':
+			return gaussian_kernel_dist(x2, x2)
 
 
 
 	'''
 	x_train = List[List[int]]
+
 	y_train = List[any]
+
 	x_test = List[List[int]]
+	
 	y_test = List[any]
 
 	Function used to tune the best hyperparameters k and distance function
@@ -162,16 +189,15 @@ class k_nearest_neighbors:
 				best_acc = accuracy
 				self.best_k = k
 
-
 	
-
+	'''
+	Normalise the features
+	x = x / L2-norm(x)
+	'''
 	def normalize(self):
 		self.x_train = [x/np.sqrt(np.dot(x,x)) if np.any(x) else x for x in self.x_train]
 		self.x_val = [x/np.sqrt(np.dot(x,x)) if np.any(x) else x for x in self.x_val]
 		self.x_test = [x/np.sqrt(np.dot(x,x)) if np.any(x) else x for x in self.x_test]
-
-
-
 
 
 	'''
