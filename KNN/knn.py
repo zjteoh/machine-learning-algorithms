@@ -64,6 +64,7 @@ class k_nearest_neighbors:
 		else:
 			raise ValueError('Either filename must be set OR x and y must be set')
 
+		self.normalize()
 		self.tuning()
 
 
@@ -164,8 +165,12 @@ class k_nearest_neighbors:
 
 	
 
-	def normalization(self):
-		raise NotImplementedError
+	def normalize(self):
+		self.x_train = [x/np.sqrt(np.dot(x,x)) if np.any(x) else x for x in self.x_train]
+		self.x_val = [x/np.sqrt(np.dot(x,x)) if np.any(x) else x for x in self.x_val]
+		self.x_test = [x/np.sqrt(np.dot(x,x)) if np.any(x) else x for x in self.x_test]
+
+
 
 
 
@@ -195,5 +200,5 @@ class k_nearest_neighbors:
 	    y_val = data[n_train:n_train + n_val].T[-1].T
 	    x_test = np.append([np.ones(n_test)], data[-n_test:].T[:-1], axis=0).T
 	    y_test = data[-n_test:].T[-1].T
-	    return x_train, y_train, x_val, y_val, x_test, y_test
+	    return x_train, y_train, x_val, y_val, x_test, y_test 
 
