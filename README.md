@@ -1,4 +1,4 @@
-# machine-learning-algorithms
+# machine-learning-models
 My quick and simple implementation of various machine learning models (work-in-progress)
 
 Currently completed:
